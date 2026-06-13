@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>Register | Platinum Grant Access</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{--navy:#0a1f44;--navy2:#0d2857;--gold:#c9a84c;--off:#f8f9fc;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--red:#dc2626;}
+html{overflow-x:hidden;}
+body{font-family:'Inter',sans-serif;color:var(--text);background:var(--off);min-height:100vh;display:flex;flex-direction:column;font-size:16px;}
+nav{background:#fff;border-bottom:1px solid var(--border);height:60px;display:flex;align-items:center;padding:0 16px;justify-content:space-between;}
+.nav-logo{width:32px;height:32px;background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:var(--gold);}
+.nav-name{font-size:14px;font-weight:800;color:var(--navy);}
+main{flex:1;display:flex;align-items:flex-start;justify-content:center;padding:24px 16px 40px;}
+.card{background:#fff;border-radius:16px;padding:28px 20px;max-width:440px;width:100%;box-shadow:0 8px 32px rgba(0,0,0,0.07);border:1px solid var(--border);}
+.card-header{text-align:center;margin-bottom:24px;}
+.reg-logo{width:52px;height:52px;background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:var(--gold);margin:0 auto 12px;}
+.card-header h1{font-size:24px;font-weight:900;color:var(--navy);margin-bottom:6px;}
+.card-header p{font-size:14px;color:var(--muted);}
+.fg{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+.fg label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);}
+.fg input{padding:13px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:15px;font-family:'Inter',sans-serif;outline:none;transition:border .2s;width:100%;-webkit-appearance:none;}
+.fg input:focus{border-color:var(--navy);box-shadow:0 0 0 3px rgba(10,31,68,0.07);}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.btn-full{width:100%;padding:15px;background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:800;cursor:pointer;font-family:'Inter',sans-serif;transition:all .25s;margin-top:6px;}
+.err{color:var(--red);font-size:13px;font-weight:600;padding:10px 12px;background:#fee2e2;border-radius:8px;margin-bottom:12px;display:none;}
+.login-link{text-align:center;margin-top:16px;font-size:14px;color:var(--muted);}
+.login-link a{color:var(--navy);font-weight:700;text-decoration:none;}
+.sec-note{display:flex;align-items:center;gap:6px;justify-content:center;margin-top:16px;font-size:12px;color:var(--muted);}
+footer{background:var(--navy);padding:20px 16px;text-align:center;}
+footer p{color:rgba(255,255,255,0.4);font-size:12px;}
+</style>
+</head>
+<body>
+<nav>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <div class="nav-logo">PG</div>
+    <span class="nav-name">Platinum Grant Access</span>
+  </div>
+  <a href="index.html" style="font-size:13px;color:var(--navy);font-weight:700;text-decoration:none;">← Home</a>
+</nav>
+<main>
+  <div class="card">
+    <div class="card-header">
+      <div class="reg-logo">PG</div>
+      <h1>Create Account</h1>
+      <p>Join 50,000+ Americans accessing grants through our platform.</p>
+    </div>
+    <div class="err" id="errMsg"></div>
+    <form onsubmit="handleReg(event)">
+      <div class="row2">
+        <div class="fg"><label>First Name</label><input type="text" id="fn" placeholder="First" required/></div>
+        <div class="fg"><label>Last Name</label><input type="text" id="ln" placeholder="Last" required/></div>
+      </div>
+      <div class="fg"><label>Email Address</label><input type="email" id="em" placeholder="you@email.com" required/></div>
+      <div class="fg"><label>Phone Number</label><input type="tel" id="ph" placeholder="(555) 000-0000" required/></div>
+      <div class="fg"><label>Create Password</label><input type="password" id="pw" placeholder="Min. 8 characters" minlength="8" required/></div>
+      <div class="fg"><label>Confirm Password</label><input type="password" id="cpw" placeholder="Repeat password" required/></div>
+      <button type="submit" class="btn-full">Create Account & Browse Grants →</button>
+    </form>
+    <div class="login-link">Already have an account? <a href="index.html">Sign In</a></div>
+    <div class="sec-note">🔒 256-bit SSL · Your data is protected</div>
+  </div>
+</main>
+<footer><p>© 2026 Platinum Grant Access. All rights reserved.</p></footer>
+<script>
+function handleReg(e){
+  e.preventDefault();
+  const pw = document.getElementById('pw').value;
+  const cpw = document.getElementById('cpw').value;
+  const err = document.getElementById('errMsg');
+  if(pw !== cpw){ err.textContent = 'Passwords do not match.'; err.style.display='block'; return; }
+  err.style.display='none';
+  const user = {
+    firstName: document.getElementById('fn').value,
+    lastName: document.getElementById('ln').value,
+    email: document.getElementById('em').value,
+    phone: document.getElementById('ph').value,
+    registeredAt: new Date().toISOString()
+  };
+  localStorage.setItem('pgaUser', JSON.stringify(user));
+  window.location.href = 'grants.html';
+}
+</script>
+</body>
+</html>

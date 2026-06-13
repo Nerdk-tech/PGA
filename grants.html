@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>Browse Grants | Platinum Grant Access</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{--navy:#0a1f44;--navy2:#0d2857;--gold:#c9a84c;--gold2:#e8c96a;--off:#f8f9fc;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--green:#16a34a;}
+html{overflow-x:hidden;}
+body{font-family:'Inter',sans-serif;color:var(--text);background:#fff;overflow-x:hidden;font-size:16px;max-width:100vw;}
+nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,0.98);border-bottom:1px solid var(--border);height:60px;display:flex;align-items:center;padding:0 16px;justify-content:space-between;}
+.nav-brand{display:flex;align-items:center;gap:10px;}
+.nav-logo{width:34px;height:34px;background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;color:var(--gold);}
+.nav-name{font-size:14px;font-weight:800;color:var(--navy);}
+.page-header{padding:28px 16px 20px;background:linear-gradient(135deg,var(--navy),var(--navy2));}
+.page-header h1{font-size:clamp(22px,5vw,32px);font-weight:900;color:#fff;margin-bottom:6px;}
+.page-header p{font-size:14px;color:rgba(255,255,255,0.7);}
+.badges-row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
+.badge-pill{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;}
+.badge-green{background:#dcfce7;color:#166534;}
+.badge-white{background:rgba(255,255,255,0.15);color:#fff;}
+.filters{background:#fff;border-bottom:1px solid var(--border);padding:12px 16px;position:sticky;top:60px;z-index:100;}
+.filter-row{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;}
+.filter-row::-webkit-scrollbar{display:none;}
+.filter-chip{padding:8px 14px;border:1.5px solid var(--border);border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;background:#fff;color:var(--text);font-family:'Inter',sans-serif;transition:all .2s;}
+.filter-chip.active,.filter-chip:hover{background:var(--navy);color:#fff;border-color:var(--navy);}
+.search-wrap{padding:10px 16px 0;}
+.search-input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:'Inter',sans-serif;outline:none;}
+.search-input:focus{border-color:var(--navy);}
+.results-count{padding:12px 16px 4px;font-size:13px;font-weight:600;color:var(--muted);}
+main{padding:8px 16px 60px;}
+.grants-list{display:flex;flex-direction:column;gap:12px;}
+.grant-card{background:#fff;border:1.5px solid var(--border);border-radius:12px;padding:16px;transition:all .25s;}
+.grant-card:hover{box-shadow:0 6px 18px rgba(0,0,0,0.07);border-color:var(--gold);}
+.gc-row1{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;gap:6px;}
+.gc-cat{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gold);background:rgba(201,168,76,0.1);padding:3px 8px;border-radius:12px;}
+.badge-on{background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:3px 8px;border-radius:12px;}
+.badge-off{background:#fee2e2;color:#991b1b;font-size:10px;font-weight:700;padding:3px 8px;border-radius:12px;}
+.badge-instant{background:#fef3c7;color:#92400e;font-size:10px;font-weight:700;padding:3px 8px;border-radius:12px;}
+.gc-name{font-size:15px;font-weight:800;color:var(--navy);margin-bottom:6px;line-height:1.3;}
+.gc-desc{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:10px;}
+.gc-amt{font-size:20px;font-weight:900;color:var(--navy);}
+.gc-dl{font-size:11px;color:var(--muted);margin-bottom:10px;}
+.gc-apply{display:block;width:100%;padding:11px;background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;border-radius:8px;text-align:center;font-size:13px;font-weight:700;text-decoration:none;transition:all .2s;font-family:'Inter',sans-serif;border:none;cursor:pointer;}
+.gc-apply.off{background:#d1d5db;color:#9ca3af;pointer-events:none;}
+.no-results{text-align:center;padding:60px 20px;color:var(--muted);}
+footer{background:var(--navy);padding:24px 16px;text-align:center;}
+footer p{color:rgba(255,255,255,0.4);font-size:13px;}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-brand">
+    <div class="nav-logo">PG</div>
+    <div class="nav-name">Platinum Grant Access</div>
+  </div>
+  <a href="index.html" style="font-size:13px;color:var(--navy);font-weight:700;text-decoration:none;">← Home</a>
+</nav>
+
+<div class="page-header">
+  <h1>Browse Grants</h1>
+  <p>165+ active grants for individuals & businesses across the USA</p>
+  <div class="badges-row">
+    <span class="badge-pill badge-green">✅ 165+ Active</span>
+    <span class="badge-pill badge-white">💵 $257M+ Pool</span>
+    <span class="badge-pill badge-white">⚡ Some Instant</span>
+  </div>
+</div>
+
+<div class="filters">
+  <div class="filter-row" id="filterChips">
+    <button class="filter-chip active" onclick="setFilter('')">All</button>
+    <button class="filter-chip" onclick="setFilter('Business')">Business</button>
+    <button class="filter-chip" onclick="setFilter('Technology')">Technology</button>
+    <button class="filter-chip" onclick="setFilter('Agriculture')">Agriculture</button>
+    <button class="filter-chip" onclick="setFilter('Housing')">Housing</button>
+    <button class="filter-chip" onclick="setFilter('Healthcare')">Healthcare</button>
+    <button class="filter-chip" onclick="setFilter('Education')">Education</button>
+    <button class="filter-chip" onclick="setFilter('Non-Profit')">Non-Profit</button>
+    <button class="filter-chip" onclick="setFilter('Emergency')">Emergency</button>
+  </div>
+</div>
+<div class="search-wrap">
+  <input type="text" class="search-input" placeholder="🔍 Search grants..." oninput="doSearch(this.value)" id="searchInput"/>
+</div>
+<div class="results-count" id="resCount">Showing 165 grants</div>
+
+<main>
+  <div class="grants-list" id="grantsList"></div>
+  <div class="no-results" id="noResults" style="display:none;">No grants found. Try a different search.</div>
+</main>
+<footer><p>© 2026 Platinum Grant Access · support@platinumgrantaccess.com</p></footer>
+
+<script>
+// Master grants list — prices $250k+, deadlines extended
+const BASE_GRANTS = [
+  // BUSINESS
+  {id:1,name:"SBIR Phase II Business Innovation Grant",cat:"Business",amount:"$2,500,000",desc:"Small Business Innovation Research for tech-driven companies in R&D phases.",active:true,instant:false,deadline:"March 31, 2027"},
+  {id:2,name:"SBA Women-Owned Business Development Grant",cat:"Business",amount:"$850,000",desc:"Federal funding for women entrepreneurs and women-led enterprises.",active:true,instant:false,deadline:"April 15, 2027"},
+  {id:3,name:"Minority Business Enterprise Grant",cat:"Business",amount:"$1,200,000",desc:"Supporting minority-owned business expansion and development.",active:true,instant:false,deadline:"March 15, 2027"},
+  {id:4,name:"SBA Microloan Expansion Program",cat:"Business",amount:"$500,000",desc:"SBA-backed program for small businesses needing capital for expansion.",active:true,instant:false,deadline:"May 30, 2027"},
+  {id:5,name:"Community Advantage Business Grant",cat:"Business",amount:"$750,000",desc:"Grant program targeting underserved markets and emerging entrepreneurs.",active:true,instant:false,deadline:"April 30, 2027"},
+  {id:6,name:"Export Market Expansion Grant",cat:"Business",amount:"$1,000,000",desc:"Federal grant for U.S. businesses expanding to international markets.",active:true,instant:false,deadline:"February 28, 2027"},
+  {id:7,name:"Veteran-Owned Business Development Grant",cat:"Business",amount:"$950,000",desc:"Dedicated support for veteran entrepreneurs and military-owned businesses.",active:true,instant:false,deadline:"March 31, 2027"},
+  {id:8,name:"Economic Injury Disaster Business Grant",cat:"Business",amount:"$1,500,000",desc:"Relief funding for businesses impacted by declared economic disasters.",active:true,instant:true,deadline:"Rolling"},
+  {id:9,name:"Rural Business Development Grant",cat:"Business",amount:"$680,000",desc:"USDA-backed grant for businesses in rural communities.",active:true,instant:false,deadline:"May 15, 2027"},
+  {id:10,name:"Clean Energy Business Transition Grant",cat:"Business",amount:"$2,000,000",desc:"Supporting businesses transitioning to renewable and clean energy.",active:true,instant:false,deadline:"June 30, 2027"},
+  {id:11,name:"Appalachian Economic Development Grant",cat:"Business",amount:"$800,000",desc:"ARC grants for economic development in Appalachian communities.",active:true,instant:false,deadline:"April 20, 2027"},
+  {id:12,name:"Opportunity Zone Business Investment Grant",cat:"Business",amount:"$1,800,000",desc:"Federal incentive grants for investments in designated Opportunity Zones.",active:true,instant:false,deadline:"May 31, 2027"},
+  {id:13,name:"Economic Development Administration Grant",cat:"Business",amount:"$2,200,000",desc:"EDA grants for distressed communities to attract investment and create jobs.",active:true,instant:false,deadline:"March 20, 2027"},
+  {id:14,name:"Advanced Manufacturing Innovation Grant",cat:"Business",amount:"$3,000,000",desc:"NIST grants for advanced manufacturing technology development.",active:true,instant:false,deadline:"April 25, 2027"},
+  {id:15,name:"Social Enterprise Development Grant",cat:"Business",amount:"$600,000",desc:"Grants for social enterprises creating community economic impact.",active:true,instant:false,deadline:"June 15, 2027"},
+  // TECHNOLOGY
+  {id:16,name:"SBIR Phase I Technology Grant",cat:"Technology",amount:"$750,000",desc:"Early-stage technology innovation funding for small research-driven businesses.",active:true,instant:false,deadline:"March 31, 2027"},
+  {id:17,name:"NSF Innovation Corps Grant",cat:"Technology",amount:"$1,200,000",desc:"NSF funding for translating research into commercial products.",active:true,instant:false,deadline:"April 30, 2027"},
+  {id:18,name:"Broadband Infrastructure Technology Grant",cat:"Technology",amount:"$5,000,000",desc:"Federal funding for expanding broadband in underserved areas.",active:true,instant:false,deadline:"May 31, 2027"},
+  {id:19,name:"Cybersecurity Research & Development Grant",cat:"Technology",amount:"$2,000,000",desc:"DHS-backed funding for cybersecurity innovation and research.",active:true,instant:false,deadline:"February 28, 2027"},
+  {id:20,name:"AI & Machine Learning Innovation Grant",cat:"Technology",amount:"$3,500,000",desc:"DOE and NSF collaborative grant for AI research.",active:true,instant:false,deadline:"June 30, 2027"},
+  {id:21,name:"Digital Equity Technology Access Grant",cat:"Technology",amount:"$1,500,000",desc:"Funding for organizations expanding digital access and tech literacy.",active:true,instant:false,deadline:"April 15, 2027"},
+  {id:22,name:"Space Technology Research Grant",cat:"Technology",amount:"$5,000,000",desc:"NASA-backed grants for space exploration and technology development.",active:true,instant:false,deadline:"March 15, 2027"},
+  {id:23,name:"Clean Technology Innovation Grant",cat:"Technology",amount:"$2,500,000",desc:"EPA-backed funding for cleantech startups and sustainability innovators.",active:true,instant:false,deadline:"May 20, 2027"},
+  {id:24,name:"Electric Vehicle Infrastructure Grant",cat:"Technology",amount:"$4,000,000",desc:"DOE grants for EV charging infrastructure in underserved communities.",active:true,instant:false,deadline:"June 15, 2027"},
+  {id:25,name:"Semiconductor R&D Innovation Grant",cat:"Technology",amount:"$8,000,000",desc:"CHIPS Act grants for semiconductor research and manufacturing.",active:true,instant:false,deadline:"April 30, 2027"},
+  {id:26,name:"Broadband Equity Access and Deployment Grant",cat:"Technology",amount:"$10,000,000",desc:"NTIA BEAD grants for broadband infrastructure in unserved areas.",active:true,instant:false,deadline:"May 31, 2027"},
+  {id:27,name:"Renewable Energy Research Grant",cat:"Technology",amount:"$4,500,000",desc:"DOE grants for renewable energy research and deployment.",active:true,instant:false,deadline:"June 30, 2027"},
+  // AGRICULTURE
+  {id:28,name:"USDA Rural Development Business Grant",cat:"Agriculture",amount:"$900,000",desc:"Rural Business Development grants for agriculture and rural enterprise growth.",active:true,instant:false,deadline:"April 30, 2027"},
+  {id:29,name:"Farm Service Emergency Assistance Grant",cat:"Agriculture",amount:"$500,000",desc:"Emergency assistance for farm operations affected by natural disasters.",active:true,instant:true,deadline:"Rolling"},
+  {id:30,name:"Specialty Crop Block Grant",cat:"Agriculture",amount:"$650,000",desc:"USDA grant for specialty crop producers to enhance competitiveness.",active:true,instant:false,deadline:"March 31, 2027"},
+  {id:31,name:"Organic Agriculture Research Grant",cat:"Agriculture",amount:"$1,200,000",desc:"USDA grants for organic farming research and sustainable practices.",active:true,instant:false,deadline:"May 15, 2027"},
+  {id:32,name:"Sustainable Agriculture Research Grant",cat:"Agriculture",amount:"$800,000",desc:"SARE grants for sustainable agricultural development and education.",active:true,instant:false,deadline:"April 20, 2027"},
+  {id:33,name:"Beginning Farmer Development Grant",cat:"Agriculture",amount:"$450,000",desc:"Support for new and beginning farmers establishing operations.",active:true,instant:false,deadline:"March 15, 2027"},
+  {id:34,name:"Agricultural Conservation Easement Grant",cat:"Agriculture",amount:"$1,500,000",desc:"NRCS funding for farmland protection and agricultural conservation.",active:true,instant:false,deadline:"June 30, 2027"},
+  {id:35,name:"Rural Energy for America Grant",cat:"Agriculture",amount:"$700,000",desc:"USDA REAP grants for rural businesses and agricultural energy projects.",active:true,instant:false,deadline:"May 30, 2027"},
+  {id:36,name:"Precision Agriculture Research Grant",cat:"Agriculture",amount:"$1,000,000",desc:"USDA grants for precision agriculture technology research.",active:true,instant:false,deadline:"April 30, 2027"},
+  {id:37,name:"Resilient Food Systems Infrastructure Grant",cat:"Agriculture",amount:"$1,300,000",desc:"USDA grants for processing, distribution, and storage infrastructure.",active:true,instant:false,deadline:"June 15, 2027"},
+  // HOUSING
+  {id:38,name:"HUD Community Development Block Grant",cat:"Housing",amount:"$1,200,000",desc:"HUD funding for community revitalization projects.",active:true,instant:false,deadline:"March 31, 2027"},
+  {id:39,name:"Emergency Housing Assistance Grant",cat:"Housing",amount:"$350,000",desc:"Rapid relief for qualifying individuals facing housing instability.",active:true,instant:true,deadline:"Rolling"},
+  {id:40,name:"HOME Investment Partnership Grant",cat:"Housing",amount:"$1,500,000",desc:"HUD HOME grants for affordable housing construction and rehabilitation.",active:true,instant:false,deadline:"May 31, 2027"},
+  {id:41,name:"Rural Housing Development Grant",cat:"Housing",amount:"$800,000",desc:"USDA Rural Housing Service grants for housing in rural communities.",active:true,instant:false,deadline:"April 15, 2027"},
+  {id:42,name:"Lead Hazard Control Grant",cat:"Housing",amount:"$600,000",desc:"HUD grants for lead paint hazard control in low-income housing.",active:true,instant:false,deadline:"March 20, 2027"},
+  {id:43,name:"Healthy Homes Production Grant",cat:"Housing",amount:"$550,000",desc:"HUD grants for addressing housing conditions affecting health.",active:true,instant:false,deadline:"June 30, 2027"},
+  {id:44,name:"Homelessness Prevention and Rapid Rehousing",cat:"Housing",amount:"$900,000",desc:"HUD grants for preventing homelessness and rapidly rehousing individuals.",active:true,instant:true,deadline:"Rolling"},
+  {id:45,name:"Senior Housing Development Grant",cat:"Housing",amount:"$1,800,000",desc:"HUD grants for affordable housing development for senior citizens.",active:true,instant:false,deadline:"May 15, 2027"},
+  {id:46,name:"Low Income Home Energy Assistance Grant",cat:"Housing",amount:"$400,000",desc:"HHS LIHEAP grants for energy assistance to low-income households.",active:true,instant:true,deadline:"Rolling"},
+  {id:47,name:"Workforce Housing Construction Grant",cat:"Housing",amount:"$2,500,000",desc:"HUD grants for construction of workforce housing.",active:true,instant:false,deadline:"June 20, 2027"},
+  // HEALTHCARE
+  {id:48,name:"NIH Research Innovation Award",cat:"Healthcare",amount:"$3,000,000",desc:"NIH funding for breakthrough medical research.",active:true,instant:false,deadline:"February 28, 2027"},
+  {id:49,name:"Community Health Center Development Grant",cat:"Healthcare",amount:"$1,500,000",desc:"HRSA grants for establishing and expanding community health centers.",active:true,instant:false,deadline:"April 30, 2027"},
+  {id:50,name:"Mental Health Services Block Grant",cat:"Healthcare",amount:"$2,000,000",desc:"SAMHSA funding for state mental health services and programs.",active:true,instant:false,deadline:"March 31, 2027"},
+  {id:51,name:"Substance Abuse Treatment Grant",cat:"Healthcare",amount:"$1,200,000",desc:"Federal grants for substance abuse prevention and treatment.",active:true,instant:false,deadline:"May 15, 2027"},
+  {id:52,name:"Cancer Research Development Grant",cat:"Healthcare",amount:"$4,000,000",desc:"NCI funding for cancer research and treatment development.",active:true,instant:false,deadline:"June 30, 2027"},
+  {id:53,name:"Maternal and Child Health Block Grant",cat:"Healthcare",amount:"$1,100,000",desc:"HRSA block grants for maternal, infant, and child health programs.",active:true,instant:false,deadline:"April 20, 2027"},
+  {id:54,name:"Rural Health Clinic Development Grant",cat:"Healthcare",amount:"$800,000",desc:"HRSA grants for rural health clinic establishment and improvement.",active:true,instant:false,deadline:"March 15, 2027"},
+  {id:55,name:"Diabetes Prevention and Control Grant",cat:"Healthcare",amount:"$1,000,000",desc:"CDC grants for diabetes prevention in high-risk communities.",active:true,instant:false,deadline:"May 31, 2027"},
+  // EDUCATION
+  {id:56,name:"Title I Education Improvement Grant",cat:"Education",amount:"$1,500,000",desc:"Department of Education grants for improving high-need school programs.",active:true,instant:false,deadline:"March 31, 2027"},
+  {id:57,name:"STEM Education Innovation Grant",cat:"Education",amount:"$2,000,000",desc:"NSF and DOE grants for STEM education programs.",active:true,instant:false,deadline:"April 30, 2027"},
+  {id:58,name:"Adult Education and Literacy Grant",cat:"Education",amount:"$700,000",desc:"DOE grants for adult basic education and workforce literacy.",active:true,instant:false,deadline:"May 20, 2027"},
+  {id:59,name:"Higher Education Institutional Grant",cat:"Education",amount:"$2,500,000",desc:"Federal grants for HBCUs and minority-serving institutions.",active:true,instant:false,deadline:"February 28, 2027"},
+  {id:60,name:"Early Childhood Education Development Grant",cat:"Education",amount:"$1,000,000",desc:"HHS grants for early childhood education and Head Start.",active:true,instant:false,deadline:"June 15, 2027"},
+  {id:61,name:"Vocational and Career Education Grant",cat:"Education",amount:"$600,000",desc:"Perkins Act grants for career and technical education.",active:true,instant:false,deadline:"April 15, 2027"},
+  {id:62,name:"Digital Literacy and Skills Grant",cat:"Education",amount:"$800,000",desc:"DOE grants for digital literacy in underserved communities.",active:true,instant:false,deadline:"May 30, 2027"},
+  // NON-PROFIT
+  {id:63,name:"Community Services Block Grant",cat:"Non-Profit",amount:"$1,200,000",desc:"HHS CSBG grants for non-profits serving low-income communities.",active:true,instant:false,deadline:"March 31, 2027"},
+  {id:64,name:"AmeriCorps Community Organization Grant",cat:"Non-Profit",amount:"$800,000",desc:"AmeriCorps grants for volunteer programs and national service.",active:true,instant:false,deadline:"April 30, 2027"},
+  {id:65,name:"Environmental Justice Grant",cat:"Non-Profit",amount:"$1,500,000",desc:"EPA grants for community organizations addressing environmental justice.",active:true,instant:false,deadline:"May 31, 2027"},
+  {id:66,name:"Historic Preservation Development Grant",cat:"Non-Profit",amount:"$1,800,000",desc:"NPS grants for preservation of historic buildings and cultural sites.",active:true,instant:false,deadline:"March 20, 2027"},
+  {id:67,name:"Youth Development Program Grant",cat:"Non-Profit",amount:"$650,000",desc:"Federal grants for youth-serving organizations.",active:true,instant:false,deadline:"June 30, 2027"},
+  {id:68,name:"Veterans Employment and Training Grant",cat:"Non-Profit",amount:"$900,000",desc:"DOL grants for veteran employment and transition services.",active:true,instant:false,deadline:"April 20, 2027"},
+  // EMERGENCY
+  {id:69,name:"FEMA Hazard Mitigation Grant",cat:"Emergency",amount:"$3,000,000",desc:"FEMA grants for projects that reduce disaster risk.",active:true,instant:false,deadline:"Rolling"},
+  {id:70,name:"Crisis Housing Emergency Relief Grant",cat:"Emergency",amount:"$400,000",desc:"Rapid housing assistance for families displaced by emergencies.",active:true,instant:true,deadline:"Rolling"},
+  {id:71,name:"Disaster Unemployment Assistance Grant",cat:"Emergency",amount:"$300,000",desc:"Income replacement for workers affected by declared disasters.",active:true,instant:true,deadline:"Rolling"},
+  {id:72,name:"Small Business Emergency Relief Grant",cat:"Emergency",amount:"$1,200,000",desc:"EIDL-style emergency relief for businesses impacted by disasters.",active:true,instant:true,deadline:"Rolling"},
+  {id:73,name:"Emergency Food and Shelter Grant",cat:"Emergency",amount:"$750,000",desc:"FEMA EFSP grants for emergency food and shelter assistance.",active:true,instant:true,deadline:"Rolling"},
+  {id:74,name:"Infrastructure Resilience Planning Grant",cat:"Emergency",amount:"$4,000,000",desc:"DHS grants for critical infrastructure resilience planning.",active:true,instant:false,deadline:"May 15, 2027"},
+];
+
+// Load any admin-added grants
+function getAllGrants(){
+  const adminGrants = JSON.parse(localStorage.getItem('pgaAdminGrants') || '[]');
+  return [...BASE_GRANTS, ...adminGrants];
+}
+
+let currentCat = '';
+let currentSearch = '';
+
+function setFilter(cat){
+  currentCat = cat;
+  document.querySelectorAll('.filter-chip').forEach(c=>{
+    c.classList.toggle('active', c.textContent.trim() === (cat||'All'));
+  });
+  renderGrants();
+}
+
+function doSearch(val){
+  currentSearch = val.toLowerCase();
+  renderGrants();
+}
+
+function renderGrants(){
+  const all = getAllGrants();
+  let filtered = all.filter(g=>{
+    const matchCat = !currentCat || g.cat === currentCat;
+    const matchSearch = !currentSearch || g.name.toLowerCase().includes(currentSearch) || g.desc.toLowerCase().includes(currentSearch);
+    return matchCat && matchSearch;
+  });
+
+  const list = document.getElementById('grantsList');
+  const noRes = document.getElementById('noResults');
+  document.getElementById('resCount').textContent = `Showing ${filtered.length} grant${filtered.length!==1?'s':''}`;
+
+  if(!filtered.length){
+    list.innerHTML=''; noRes.style.display='block'; return;
+  }
+  noRes.style.display='none';
+  list.innerHTML = filtered.map(g=>`
+    <div class="grant-card">
+      <div class="gc-row1">
+        <span class="gc-cat">${g.cat}</span>
+        <span class="${g.active?(g.instant?'badge-instant':'badge-on'):'badge-off'}">${g.active?(g.instant?'⚡ Instant':'✅ Active'):'❌ Closed'}</span>
+      </div>
+      <div class="gc-name">${g.name}</div>
+      <div class="gc-desc">${g.desc}</div>
+      <div class="gc-amt">${g.amount}</div>
+      <div class="gc-dl">📅 ${g.deadline}</div>
+      <a href="apply.html?gid=${g.id}&gname=${encodeURIComponent(g.name)}&gamt=${encodeURIComponent(g.amount)}" class="gc-apply ${g.active?'':'off'}">${g.active?'Apply Now →':'Closed'}</a>
+    </div>
+  `).join('');
+}
+
+window.addEventListener('load',()=>{
+  const params = new URLSearchParams(window.location.search);
+  const cat = params.get('cat');
+  if(cat) setFilter(cat);
+  else renderGrants();
+});
+</script>
+</body>
+</html>

